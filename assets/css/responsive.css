@@ -1,0 +1,61 @@
+
+
+@media only screen and (min-width:1025px) and (max-width:1200px) {
+	.single_screen_slide {
+		padding: 48px 30px 52px
+	}
+}
+
+@media only screen and (min-width:768px) and (max-width:1024px) {
+	.single_screen_slide {
+		padding: 48px 30px 52px
+	}
+}
+
+@media only screen and (min-width:768px) and (max-width:991px) {
+	#mainmenu ul.nav.navbar-nav li a {
+		padding: 20px 10px
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.mainmenu-area {
+		background: #1e5799;
+		background: -webkit-linear-gradient(left, #15a3cc 0%, #7129d9 0%, #8d17f6 100%);
+		background: linear-gradient(to right, #15a3cc 0%, #7129d9 0%, #8d17f6 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#15a3cc', endColorstr='#8d17f6', GradientType=1)
+	}
+	.mainmenu-area .navbar-toggle {
+		background: transparent none repeat scroll 0 0;
+		border: 1px solid #fff;
+		border-radius: 1px;
+		padding: 10px;
+		-webkit-transition: .3s;
+		transition: .3s
+	}
+	.mainmenu-area .navbar-toggle .icon-bar {
+		background-color: #fff;
+		-webkit-transition: .3s;
+		transition: .3s
+	}
+	.mainmenu-area .navbar-toggle:focus,
+	.mainmenu-area .navbar-toggle:hover {
+		background-color: #fff
+	}
+	.mainmenu-area .navbar-toggle:focus .icon-bar,
+	.mainmenu-area .navbar-toggle:hover .icon-bar {
+		background-color: #50d1c0
+	}
+	.well.well-lg {
+		padding: 30px
+	}
+	#mainmenu ul.nav.navbar-nav li a {
+		text-align: center
+	}
+	.comment-list .media-left {
+		display: inline-block;
+		padding: 20px 20px 10px
+	}
+}
+
+@media only screen and (min-width:480px) and (max-width:767px) {}
