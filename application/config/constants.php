@@ -87,3 +87,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 define('WEB_SITE', 'Mortgage4U');
 define('PROFILE_PICTURE_PATH', 'user_images/');
 define('EMAIL', 'info@stepuptechnosys.com');
+define('ADMIN_EMAIL', 'kevadiya.chirag000@gmail.com');

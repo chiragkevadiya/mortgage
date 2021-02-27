@@ -19,14 +19,14 @@ function send_mail($to, $subject, $html) {
         'smtp_host' => 'smtp.ionos.com',
         'smtp_port' => '587',
         'smtp_user' => EMAIL,
-        'smtp_pass' => 'Support@7878#',
+        'smtp_pass' => 'Stepup@310#',
         'charset' => 'iso-8859-1'
     );
 
     $CI->email->initialize($config);
     $CI->email->set_newline("\r\n");
 
-    $CI->email->from(EMAIL, 'Ludo - Pocket Game');
+    $CI->email->from(EMAIL, 'Mortgage4u');
     $CI->email->to($to);
     $CI->email->subject($subject);
     $CI->email->message($html);

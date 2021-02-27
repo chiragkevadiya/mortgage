@@ -297,6 +297,7 @@ class Webservices extends REST_Controller {
         $this->form_validation->set_rules('newLoan', 'New Loan Amount', 'trim|required|numeric');
         $this->form_validation->set_rules('currentRate', 'Current Rate', 'trim|required|numeric');
         $this->form_validation->set_rules('estimatedValue', 'Estiamted Value', 'trim|required|numeric');
+        $this->form_validation->set_rules('currentBank', 'Current Bank', 'trim|required');
         $this->form_validation->set_rules('purchaseDate', 'Purchase Date', 'trim|required');
         $this->form_validation->set_rules('propertyType', 'Property Type', 'trim|required');
         $this->form_validation->set_rules('purposeType', 'Purpose Type', 'trim|required');
@@ -313,6 +314,7 @@ class Webservices extends REST_Controller {
                 'newLoan' => $data['newLoan'],
                 'currentRate' => $data['currentRate'],
                 'estimatedValue' => $data['estimatedValue'],
+                'currentBank' => $data['currentBank'],
                 'purchaseDate' => $data['purchaseDate'],
                 'propertyType' => $data['propertyType'],
                 'purposeType' => $data['purposeType'],
@@ -325,13 +327,16 @@ class Webservices extends REST_Controller {
 
             $requestId = $this->webservice->insert_data('refinance_request', $postData);
             if (!empty($requestId)) {
+                $this->data['data'] = $postData;
+                $html = $this->load->view('auth/email/refinance_offer_request', $this->data, true);
+                send_mail(ADMIN_EMAIL, 'Refinance quote request', $html);
                 $this->response(['status' => true, 'message' => 'Refinance offer request has been sent successfully.'], REST_Controller::HTTP_OK);
             } else {
                 $this->response(['status' => false, 'data' => new stdClass(), 'message' => 'Failed something went wrong.'], REST_Controller::HTTP_OK);
             }
         } else {
             $error = ['cashoutType' => form_error('cashoutType'), 'newLoan' => form_error('newLoan'), 'currentRate' => form_error('currentRate'),
-                'estimatedValue' => form_error('estimatedValue'), 'purchaseDate' => form_error('purchaseDate'), 'propertyType' => form_error('propertyType'),
+                'estimatedValue' => form_error('estimatedValue'), 'currentBank' => form_error('currentBank'), 'purchaseDate' => form_error('purchaseDate'), 'propertyType' => form_error('propertyType'),
                 'purposeType' => form_error('purposeType'), 'note' => form_error('note'), 'name' => form_error('name'), 'phone' => form_error('phone'),
                 'email' => form_error('email'), 'address' => form_error('address')];
             $this->response(['status' => false, 'data' => ['error' => $error], 'message' => 'Validation Error'], REST_Controller::HTTP_OK);

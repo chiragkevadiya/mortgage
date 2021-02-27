@@ -86,7 +86,7 @@
                 font-weight: 400;
                 line-height: 1.4;
                 margin: 0;
-                Margin-bottom: 30px; }
+                Margin-bottom: 10px; }
             h1 {
                 font-size: 20px;
                 font-weight: 300;
@@ -234,10 +234,25 @@
                 .btn-primary a:hover {
                     background-color: #34495e !important;
                     border-color: #34495e !important; } }
-                </style>
-            </head>
-            <body class="">
-                <table border="0" cellpadding="0" cellspacing="0" class="body">
+
+            .info table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            .info table td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 5px;
+            }
+
+            .info table tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+    <body class="">
+        <table border="0" cellpadding="0" cellspacing="0" class="body">
             <tr>
                 <td>&nbsp;</td>
                 <td class="container">
@@ -252,6 +267,11 @@
                                                 <h1>Refinance quote request</h1>
                                                 <p>Hi Isaac,</p>
                                                 <p>I just completed this request on your mobile app, see below the info, please provide me with the best possible quote options for my refinance.</p>
+
+                                                <h4><b>Name:</b> <span><?php echo $data['name']; ?></span></h4>
+                                                <h4><b>Email:</b> <span><?php echo $data['email']; ?></span></h4>
+                                                <h4><b>Phone:</b> <span><?php echo $data['phone']; ?></span></h4>
+                                                <h4><b>Address:</b> <span><?php echo $data['address']; ?></span></h4>
                                             </td>
                                         </tr>
                                     </table>
@@ -260,6 +280,47 @@
 
                             <!-- END MAIN CONTENT AREA -->
                         </table>
+
+                        <div class="info">
+                            <table class="">
+                                <tr>
+                                    <td>Cashout Type</td>
+                                    <td><?php echo $data['cashoutType']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>New Loan Amount</td>
+                                    <td><?php echo $data['newLoan']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Current Rate</td>
+                                    <td><?php echo $data['currentRate']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Estimated Value</td>
+                                    <td><?php echo $data['estimatedValue']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Current Bank</td>
+                                    <td><?php echo $data['currentBank']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Purchase</td>
+                                    <td><?php echo $data['purchaseDate']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Type of Property</td>
+                                    <td><?php echo $data['propertyType']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Purpose Type</td>
+                                    <td><?php echo $data['purposeType']; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Note</td>
+                                    <td><?php echo $data['note']; ?></td>
+                                </tr>
+                            </table> 
+                        </div>
 
                         <!-- END CENTERED WHITE CONTAINER -->
                     </div>
