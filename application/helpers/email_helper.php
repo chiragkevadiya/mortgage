@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-function send_mail($to, $subject, $html) {
+function send_mail($to, $subject, $html, $attch = null) {
     $CI = & get_instance();
 
     //Load email library
@@ -16,10 +16,10 @@ function send_mail($to, $subject, $html) {
     $config = array(
         'mailtype' => 'html',
         'protocol' => 'smtp',
-        'smtp_host' => 'smtp.ionos.com',
+        'smtp_host' => 'smtp.sendgrid.net',
         'smtp_port' => '587',
-        'smtp_user' => EMAIL,
-        'smtp_pass' => 'Stepup@310#',
+        'smtp_user' => 'apikey',
+        'smtp_pass' => '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',
         'charset' => 'iso-8859-1'
     );
 
@@ -30,6 +30,9 @@ function send_mail($to, $subject, $html) {
     $CI->email->to($to);
     $CI->email->subject($subject);
     $CI->email->message($html);
+    if ($attch) {
+        $CI->email->attach($attch);
+    }
     if ($CI->email->send()) {
         return true;
     } else {

@@ -181,7 +181,8 @@ $config['email_config'] = array(
     'smtp_port' => '587',
     'smtp_user' => 'info@stepuptechnosys.com',
     'smtp_pass' => 'Stepup@310#',
-    'charset' => 'utf-8'
+    'charset' => 'utf-8',
+    'newline' => "\r\n"
 );
 
 /*

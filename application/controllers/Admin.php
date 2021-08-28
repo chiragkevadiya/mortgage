@@ -47,6 +47,11 @@ class Admin extends MY_Controller {
         $this->data['content'] = 'admin/welcome_message';
         $this->load->view('admin/main', $this->data);
     }
+    
+    /** cal_email */
+    public function cal_email() {
+        $this->load->view('auth/email/mortgage_calculation');
+    }
 
     /** users */
     public function users() {
@@ -147,4 +152,67 @@ class Admin extends MY_Controller {
         }
     }
 
+    /** pre-approval request */
+    public function prequal_request() {
+        $this->data['title'] = 'Pre-Qualification Request';
+
+        $this->data['content'] = 'admin/prequal_request';
+        $this->load->view('admin/main', $this->data);
+    }
+
+    /** get prequal_request */
+    public function get_prequal_request($id) {
+        $count_res = $this->backend->getPreRequest();
+
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = site_url('admin/get_prequal_request/');
+        $config['total_rows'] = $count_res;
+        $config['uri_segment'] = 3;
+        $perpage = $config['per_page'] = $this->input->post('perpage');
+
+        $this->pagination->initialize($config);
+        $res = $this->backend->getAllPreRequest($perpage, $id);
+        $res['links'] = '';
+
+        if ($count_res > $perpage) {
+            $res['links'] = $this->pagination->create_links();
+        }
+
+        $res['total_rows'] = $count_res;
+        header('Content-Type: application/json');
+        echo json_encode($res);
+    }
+    
+    /** refinance request */
+    public function refinance_request() {
+        $this->data['title'] = 'Refinance Request';
+
+        $this->data['content'] = 'admin/refinance_request';
+        $this->load->view('admin/main', $this->data);
+    }
+
+    /** get refinance_request */
+    public function get_refinance_request($id) {
+        $count_res = $this->backend->getRefinance();
+
+        $this->load->library("pagination");
+        $config = array();
+        $config["base_url"] = site_url('admin/get_refinance_request/');
+        $config['total_rows'] = $count_res;
+        $config['uri_segment'] = 3;
+        $perpage = $config['per_page'] = $this->input->post('perpage');
+
+        $this->pagination->initialize($config);
+        $res = $this->backend->getAllRefinance($perpage, $id);
+        $res['links'] = '';
+
+        if ($count_res > $perpage) {
+            $res['links'] = $this->pagination->create_links();
+        }
+
+        $res['total_rows'] = $count_res;
+        header('Content-Type: application/json');
+        echo json_encode($res);
+    }
 }

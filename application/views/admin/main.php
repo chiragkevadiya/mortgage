@@ -64,25 +64,25 @@ $uri = $this->uri->segment(2);
                     <ul id="main-menu" class="main-menu">
                         <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
                         <li class="<?php if ($uri == '' || $uri == 'index') { echo 'active'; } ?>">
-                            <a href="<?= base_url('admin/index') ?>">
+                            <a href="<?= site_url('admin/index') ?>">
                                 <i class="entypo-monitor"></i>
                                 <span class="title">Dashboard</span>
                             </a>
                         </li>
                         <li class="<?php if ($uri == 'users') { echo 'active'; } ?>">
-                            <a href="<?= base_url('admin/users') ?>">
+                            <a href="<?= site_url('admin/users') ?>">
                                 <i class="entypo-users"></i>
                                 <span class="title">Users</span>
                             </a>
                         </li>
-                        <li class="<?php if ($uri == 'pre_request') { echo 'active'; } ?>">
-                            <a href="#">
+                        <li class="<?php if ($uri == 'prequal_request') { echo 'active'; } ?>">
+                            <a href="<?= site_url('admin/prequal_request') ?>">
                                 <i class="entypo-credit-card"></i>
                                 <span class="title">Pre-Qual Request</span>
                             </a>
                         </li>
                         <li class="<?php if ($uri == 'refinance_request') { echo 'active'; } ?>">
-                            <a href="#">
+                            <a href="<?= site_url('admin/refinance_request') ?>">
                                 <i class="entypo-paypal"></i>
                                 <span class="title">Refinance Request</span>
                             </a>

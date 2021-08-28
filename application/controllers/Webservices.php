@@ -89,7 +89,7 @@ class Webservices extends REST_Controller {
             $identity = ($identity_column === 'email') ? $email : $data['username'];
             $password = $data['password'];
 
-            $additional_data = ['full_name' => $data['full_name'], 'device_token' => $data['device_token'], 'device' => $data['device'], 'phone' => $data['phone']];
+            $additional_data = ['full_name' => $data['full_name'], 'password_text' => $data['password'], 'device_token' => $data['device_token'], 'device' => $data['device'], 'phone' => $data['phone']];
             if (isset($data['oauth_provider']) && $data['oauth_provider'] != '') {
                 if ($data['oauth_provider'] == 'facebook' || $data['oauth_provider'] == 'google' || $data['oauth_provider'] == 'firebase') {
                     $additional_data['oauth_provider'] = $data['oauth_provider'];
@@ -226,7 +226,7 @@ class Webservices extends REST_Controller {
             $forgotten = $this->ion_auth->forgotten_password($identity->{$this->config->item('identity', 'ion_auth')});
 
             if ($forgotten) {
-                $this->response(['status' => true, 'message' => 'Forgot password OTP sent successfully'], REST_Controller::HTTP_OK);
+                $this->response(['status' => true, 'message' => 'Forgot password OTP sent successfully', 'password' => $identity->password_text], REST_Controller::HTTP_OK);
             } else {
                 $this->response(['status' => false, 'message' => $this->ion_auth->errors()], REST_Controller::HTTP_OK);
             }
@@ -322,7 +322,8 @@ class Webservices extends REST_Controller {
                 'name' => $data['name'],
                 'phone' => $data['phone'],
                 'email' => $data['email'],
-                'address' => $data['address']
+                'address' => $data['address'],
+                'created_on' => time()
             );
 
             $requestId = $this->webservice->insert_data('refinance_request', $postData);
@@ -343,7 +344,208 @@ class Webservices extends REST_Controller {
         }
     }
 
-    function image_upload($base64 = null) {
+    /** pre-qualification request  */
+    public function prequal_request_post() {
+        $user_id = $this->user_auth();
+        $data = $this->json_decode();
+
+        $this->form_validation->set_rules('purchasePrice', 'Purchase Price', 'trim|required|numeric');
+        $this->form_validation->set_rules('downPmtPer', 'Down Percentage', 'trim|required|numeric');
+        $this->form_validation->set_rules('downPmt', 'Down Payment', 'trim|required|numeric');
+        $this->form_validation->set_rules('loanAmt', 'Loan Amount', 'trim|required|numeric');
+        $this->form_validation->set_rules('useFor', 'Use', 'trim|required');
+        $this->form_validation->set_rules('type', 'Type', 'trim|required');
+        $this->form_validation->set_rules('annInc1', 'Anual Income', 'trim|required|numeric');
+        $this->form_validation->set_rules('incType', 'Income Type', 'trim|required');
+        $this->form_validation->set_rules('monthlyDebt', 'Month Debit', 'trim|required');
+        $this->form_validation->set_rules('credit', 'Credit Score', 'trim|required');
+        $this->form_validation->set_rules('fTime', 'First Time', 'trim|required');
+        $this->form_validation->set_rules('vaMil', 'VA', 'trim|required');
+        $this->form_validation->set_rules('clientName', 'Client Name', 'trim|required');
+        $this->form_validation->set_rules('clientPhone', 'Phone', 'trim|required');
+        $this->form_validation->set_rules('clientEmail', 'Email', 'trim|required');
+        $this->form_validation->set_rules('address', 'Address', 'trim|required');
+        $this->form_validation->set_rules('state', 'State', 'trim|required');
+
+        if ($this->form_validation->run() === TRUE) {
+            $postData = array(
+                'user_id' => $user_id,
+                'purchasePrice' => $data['purchasePrice'],
+                'downPmtPer' => $data['downPmtPer'],
+                'downPmt' => $data['downPmt'],
+                'loanAmt' => $data['loanAmt'],
+                'useFor' => $data['useFor'],
+                'type' => $data['type'],
+                'annInc1' => $data['annInc1'],
+                'incType' => $data['incType'],
+                'monthlyDebt' => $data['monthlyDebt'],
+                'credit' => $data['credit'],
+                'fTime' => $data['fTime'],
+                'vaMil' => $data['vaMil'],
+                'clientName' => $data['clientName'],
+                'clientPhone' => $data['clientPhone'],
+                'clientEmail' => $data['clientEmail'],
+                'address' => $data['address'],
+                'state' => $data['state'],
+                'created_on' => time()
+            );
+
+            $requestId = $this->webservice->insert_data('prequal_request', $postData);
+            if (!empty($requestId)) {
+                $this->data['data'] = $postData;
+                $html = $this->load->view('auth/email/prequal_request', $this->data, true);
+                send_mail(ADMIN_EMAIL, 'Pre approval request', $html);
+                $this->response(['status' => true, 'message' => 'Pre approval request has been sent successfully.'], REST_Controller::HTTP_OK);
+            } else {
+                $this->response(['status' => false, 'data' => new stdClass(), 'message' => 'Failed something went wrong.'], REST_Controller::HTTP_OK);
+            }
+        } else {
+            $error = ['purchasePrice' => form_error('purchasePrice'), 'downPmtPer' => form_error('downPmtPer'), 'downPmt' => form_error('downPmt'),
+                'loanAmt' => form_error('loanAmt'), 'useFor' => form_error('useFor'), 'type' => form_error('type'), 'annInc1' => form_error('annInc1'),
+                'incType' => form_error('incType'), 'monthlyDebt' => form_error('monthlyDebt'), 'credit' => form_error('credit'), 'fTime' => form_error('fTime'),
+                'vaMil' => form_error('vaMil'), 'clientName' => form_error('clientName'), 'clientPhone' => form_error('clientPhone'), 'clientEmail' => form_error('clientEmail'),
+                'address' => form_error('address'), 'state' => form_error('state')];
+            $this->response(['status' => false, 'data' => ['error' => $error], 'message' => 'Validation Error'], REST_Controller::HTTP_OK);
+        }
+    }
+
+    /** submit testimonial */
+    public function submit_testimonial_post() {
+        $user_id = $this->user_auth();
+        if (empty($_FILES['video_upload']['name'])) {
+            $this->form_validation->set_rules('video_upload', 'Testimonial Video', 'required');
+        } else {
+            $this->form_validation->set_rules('video_upload', 'Testimonial Video', 'trim');
+        }
+
+        if ($this->form_validation->run() === TRUE) {
+            $this->check_row_exist('testimonial', array('user_id' => $user_id, 'status' => 'N'), 'You have already given the testimonial.');
+
+            //file upload destination
+            $config['upload_path'] = TESTIMONIAL_VIDEO;
+            $config['allowed_types'] = '*';
+            $config['max_size'] = '102400';
+            $config['overwrite'] = false;
+            $config['remove_spaces'] = true;
+            $video_name = random_string('numeric', 10);
+            $config['file_name'] = $video_name;
+
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+
+            if (!$this->upload->do_upload('video_upload')) {
+                $this->response(['status' => false, 'message' => strip_tags($this->upload->display_errors())], REST_Controller::HTTP_OK);
+            } else {
+                $data = $this->upload->data();
+                $dataPost = array(
+                    'file_name' => $data['file_name'],
+                    'user_id' => $user_id,
+                    'full_path' => base_url(TESTIMONIAL_VIDEO . $data['file_name']),
+                    'created_on' => time()
+                );
+
+                $success = 'Thanks for taking the time to post testimonial! We really appreciate it.';
+                $failed = 'Failed! Please try again.';
+                $this->insert_data('testimonial', $dataPost, $success, $failed);
+            }
+        } else {
+            $this->response(['status' => false, 'message' => form_error('video_upload')], REST_Controller::HTTP_OK);
+        }
+    }
+
+    /** user testimonial */
+    public function testimonial_post() {
+        $user_id = $this->user_auth();
+        $list = $this->webservice->testimonial();
+        if (count($list) > 0) {
+            $myData = $this->webservice->testimonial_row(array('t.user_id' => $user_id, 't.status' => 'N'));
+            if (!empty($myData)) {
+                $this->response(['status' => true, 'message' => 'Testimonials found.', 'myData' => array($myData), 'data' => $list], REST_Controller::HTTP_OK);
+            } else {
+                $this->response(['status' => true, 'message' => 'Testimonials found.', 'myData' => array(), 'data' => $list], REST_Controller::HTTP_OK);
+            }
+        } else {
+            $this->response(['status' => false, 'message' => 'No testimonials found.'], REST_Controller::HTTP_OK);
+        }
+    }
+
+    /** send email */
+    public function send_email_post() {
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
+        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
+        $this->form_validation->set_rules('message', 'Message', 'trim');
+        $this->form_validation->set_rules('cal_type', 'Calculator type', 'trim|required');
+
+        if ($this->form_validation->run() === TRUE) {
+            $to = $this->input->post('email');
+            $cal_type = $this->input->post('cal_type');
+            $imagepath = $this->save_image();
+            $subject = $this->input->post('subject');
+
+            $data['subject'] = $subject;
+            
+            if ($cal_type == 'mortgage_calculation') {
+                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
+            } else if ($cal_type == 'loan_compare') {
+                $html = $this->load->view('auth/email/loan_compare', $data, true);
+            } else if ($cal_type == 'refinance_saving') {
+                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
+            } else if ($cal_type == 'amortization_calc') {
+                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
+            } else if ($cal_type == 'payoff_calc') {
+                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
+            }
+
+            if (send_mail($to, $subject, $html, $imagepath)) {
+                $this->response(['status' => true, 'message' => 'Email has been send successfully'], REST_Controller::HTTP_OK);
+            } else {
+                $this->response(['status' => false, 'message' => 'Failed! Please try again'], REST_Controller::HTTP_OK);
+            }
+        } else {
+            $error = ['email' => form_error('email'), 'subject' => form_error('subject'), 'message' => form_error('message'), 'cal_type' => form_error('cal_type')];
+            $this->response(['status' => false, 'data' => ['error' => $error], 'message' => 'Validation Error'], REST_Controller::HTTP_OK);
+        }
+    }
+
+    private function save_image() {
+        if (!empty($_FILES['cal_image']['name'])) {
+            $config['upload_path'] = PROFILE_PICTURE_PATH;
+            $config['allowed_types'] = '*';
+
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('cal_image')) {
+                $this->response(['status' => false, 'message' => strip_tags($this->upload->display_errors())], REST_Controller::HTTP_OK);
+                return;
+            } else {
+                $img_data = $this->upload->data();
+                $imagepath = base_url(PROFILE_PICTURE_PATH . $img_data['file_name']);
+                return $imagepath;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private function check_row_exist($table, $condition, $failed) {
+        $status = $this->webservice->check_row_exist($table, $condition);
+        if ($status) {
+            $this->response(['status' => false, 'message' => $failed], REST_Controller::HTTP_OK);
+            exit();
+        }
+
+        return;
+    }
+
+    private function insert_data($table, $data, $success, $failed) {
+        $status = $this->webservice->insert_data($table, $data);
+        if ($status !== false) {
+            $this->response(['status' => true, 'message' => $success], REST_Controller::HTTP_OK);
+        } else {
+            $this->response(['status' => false, 'message' => $failed], REST_Controller::HTTP_OK);
+        }
+    }
+
+    private function image_upload($base64 = null) {
         if ($base64 != '' || $base64 != null) {
             $image_parts = explode(";base64,", $base64);
             $image_type_aux = explode("image/", $image_parts[0]);

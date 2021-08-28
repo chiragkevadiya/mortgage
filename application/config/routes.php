@@ -62,3 +62,7 @@ $route['web/apis/forgot_password'] = 'webservices/forgot_password';
 $route['web/apis/reset_password'] = 'webservices/reset_password';
 $route['web/apis/edit_profile'] = 'webservices/edit_profile';
 $route['web/apis/refinance_request'] = 'webservices/refinance_request';
+$route['web/apis/prequal_request'] = 'webservices/prequal_request';
+$route['web/apis/submit_testimonial'] = 'webservices/submit_testimonial';
+$route['web/apis/testimonial'] = 'webservices/testimonial';
+$route['web/apis/send_email'] = 'webservices/send_email';

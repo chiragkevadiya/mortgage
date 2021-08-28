@@ -153,4 +153,112 @@ class Backend_model extends CI_Model {
             return ['status' => FALSE];
         }
     }
+    
+    function getPreRequest() {
+        $this->db->select('p.id');
+        $this->db->from('prequal_request as p');
+        $this->db->join('users as u', 'p.user_id = u.id');
+
+        if ($this->input->post('search')) {
+            $search = strtolower($this->input->post('search'));
+            $this->db->group_start();
+
+            $this->db->or_like('LOWER(p.clientName)', $search);
+            $this->db->or_like('LOWER(p.clientPhone)', $search);
+            $this->db->or_like('LOWER(p.clientEmail)', $search);
+            $this->db->or_like('LOWER(p.state)', $search);
+            $this->db->or_like('LOWER(u.full_name)', $search);
+            $this->db->or_like('LOWER(u.email)', $search);
+            $this->db->group_end();
+        }
+
+        return $this->db->count_all_results();
+    }
+
+    function getAllPreRequest($limit, $start) {
+        $this->db->select('p.*, u.email, u.full_name, u.phone, u.profile_picture, u.profile_url, FROM_UNIXTIME(u.created_on) as created_on, g.name as user_role');
+        $this->db->from('prequal_request as p');
+        $this->db->join('users as u', 'p.user_id = u.id');
+        $this->db->join('users_groups as ug', 'ug.user_id = u.id');
+        $this->db->join('groups as g', 'g.id = ug.group_id');
+
+        if ($this->input->post('search')) {
+            $search = strtolower($this->input->post('search'));
+            $this->db->group_start();
+
+            $this->db->or_like('LOWER(p.clientName)', $search);
+            $this->db->or_like('LOWER(p.clientPhone)', $search);
+            $this->db->or_like('LOWER(p.clientEmail)', $search);
+            $this->db->or_like('LOWER(p.state)', $search);
+            $this->db->or_like('LOWER(u.full_name)', $search);
+            $this->db->or_like('LOWER(u.email)', $search);
+            $this->db->group_end();
+        }
+
+        if ($limit > 0) {
+            $this->db->limit($limit, $start);
+        }
+
+        $this->db->order_by('p.id', 'desc');
+        $res = $this->db->get()->result();
+
+        if (count($res) > 0) {
+            return ['status' => TRUE, 'data' => $res];
+        } else {
+            return ['status' => FALSE];
+        }
+    }
+    
+    function getRefinance() {
+        $this->db->select('r.id');
+        $this->db->from('refinance_request as r');
+        $this->db->join('users as u', 'r.user_id = u.id');
+
+        if ($this->input->post('search')) {
+            $search = strtolower($this->input->post('search'));
+            $this->db->group_start();
+
+            $this->db->or_like('LOWER(r.name)', $search);
+            $this->db->or_like('LOWER(r.phone)', $search);
+            $this->db->or_like('LOWER(r.email)', $search);
+            $this->db->or_like('LOWER(u.full_name)', $search);
+            $this->db->or_like('LOWER(u.email)', $search);
+            $this->db->group_end();
+        }
+
+        return $this->db->count_all_results();
+    }
+
+    function getAllRefinance($limit, $start) {
+        $this->db->select('r.*, u.email, u.full_name, u.phone, u.profile_picture, u.profile_url, FROM_UNIXTIME(u.created_on) as created_on, g.name as user_role');
+        $this->db->from('refinance_request as r');
+        $this->db->join('users as u', 'r.user_id = u.id');
+        $this->db->join('users_groups as ug', 'ug.user_id = u.id');
+        $this->db->join('groups as g', 'g.id = ug.group_id');
+
+        if ($this->input->post('search')) {
+            $search = strtolower($this->input->post('search'));
+            $this->db->group_start();
+
+            $this->db->or_like('LOWER(r.name)', $search);
+            $this->db->or_like('LOWER(r.phone)', $search);
+            $this->db->or_like('LOWER(r.email)', $search);
+            $this->db->or_like('LOWER(u.full_name)', $search);
+            $this->db->or_like('LOWER(u.email)', $search);
+            $this->db->group_end();
+        }
+
+        if ($limit > 0) {
+            $this->db->limit($limit, $start);
+        }
+
+        $this->db->order_by('r.requestId', 'desc');
+        $res = $this->db->get()->result();
+
+        if (count($res) > 0) {
+            return ['status' => TRUE, 'data' => $res];
+        } else {
+            return ['status' => FALSE];
+        }
+    }
 }
