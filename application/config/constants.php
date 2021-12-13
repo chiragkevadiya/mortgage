@@ -88,5 +88,6 @@ define('WEB_SITE', 'Mortgage4U');
 define('EMAIL', 'info@stepuptechnosys.com');
 define('ADMIN_EMAIL', 'kevadiya.chirag000@gmail.com');
 
+define('NEWS_IMAGE', 'user_data/news/');
 define('PROFILE_PICTURE_PATH', 'user_data/profile/');
 define('TESTIMONIAL_VIDEO', 'user_data/testimonial_video/');

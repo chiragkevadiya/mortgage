@@ -3031,7 +3031,7 @@ body {
 .page-container .sidebar-menu #main-menu li {
   position: relative;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   border-bottom: 1px solid rgba(69, 74, 84, 0.7);
 }
 .page-container .sidebar-menu #main-menu li#search {
@@ -3095,7 +3095,7 @@ body {
 .page-container .sidebar-menu #main-menu li a {
   position: relative;
   display: block;
-  padding: 10px 20px;
+  padding: 15px 20px;
   color: #aaabae;
   z-index: 2;
   -moz-transition: color 250ms ease-in-out, background-color 250ms ease-in-out;

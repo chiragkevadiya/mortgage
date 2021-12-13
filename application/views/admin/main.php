@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 $uri = $this->uri->segment(2);
+$className = $this->router->fetch_class();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,25 +12,26 @@ $uri = $this->uri->segment(2);
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="Neon Admin Panel" />
         <meta name="author" content="" />
-        <title><?= WEB_SITE . ' - ' . $title ?></title>
+        <title><?php echo WEB_SITE . ' - ' . $title ?></title>
 
-        <link rel="shortcut icon" href="<?= base_url('assets_admin/images/favicon/favicon.ico') ?>" type="image/x-icon">
-        <link rel="icon" href="<?= base_url('assets_admin/images/favicon/favicon.ico') ?>" type="image/x-icon">
+        <link rel="shortcut icon" href="<?php echo base_url('assets_admin/images/favicon/favicon.ico') ?>" type="image/x-icon">
+        <link rel="icon" href="<?php echo base_url('assets_admin/images/favicon/favicon.ico') ?>" type="image/x-icon">
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
 
-        <link rel="stylesheet" href="<?= base_url('assets_admin/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/font-icons/entypo/css/entypo.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/font-icons/font-awesome/css/font-awesome.min.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/font-icons/entypo/css/entypo.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/font-icons/font-awesome/css/font-awesome.min.css') ?>">
 
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/bootstrap.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/neon-core.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/neon-theme.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/neon-forms.css') ?>">
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/custom.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/bootstrap.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/neon-core.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/neon-theme.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/neon-forms.css') ?>">
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/custom.css') ?>">
 
         <!-- wait me -->
-        <link rel="stylesheet" href="<?= base_url('assets_admin/css/waitMe.css'); ?>">
-        <script src="<?= base_url('assets_admin/js/jquery-1.11.0.min.js') ?>"></script>
+        <link rel="stylesheet" href="<?php echo base_url('assets_admin/css/waitMe.css'); ?>">
+        <script type="text/javascript" src="<?php echo base_url('assets_admin/js/jquery-1.11.0.min.js') ?>"></script>
+        <script type="text/javascript" src="<?php echo base_url('assets_admin/ckeditor/ckeditor.js'); ?>"></script>
     </head>
     <body class="page-body">
         <div class="page-container">
@@ -40,8 +42,8 @@ $uri = $this->uri->segment(2);
                     <header class="logo-env">
                         <!-- logo -->
                         <div class="logo">
-                            <a href="<?= site_url('admin/index') ?>">
-                                <img src="<?= base_url('assets_admin/images/logo-text.png') ?>" width="120" alt="" />
+                            <a href="<?php echo site_url('admin/index') ?>">
+                                <img src="<?php echo base_url('assets_admin/images/logo-text.png') ?>" width="120" alt="" />
                             </a>
                         </div>
 
@@ -63,28 +65,84 @@ $uri = $this->uri->segment(2);
 
                     <ul id="main-menu" class="main-menu">
                         <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-                        <li class="<?php if ($uri == '' || $uri == 'index') { echo 'active'; } ?>">
-                            <a href="<?= site_url('admin/index') ?>">
+                        <li class="<?php
+                        if ($uri == '' || $uri == 'index') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('admin/index') ?>">
                                 <i class="entypo-monitor"></i>
                                 <span class="title">Dashboard</span>
                             </a>
                         </li>
-                        <li class="<?php if ($uri == 'users') { echo 'active'; } ?>">
-                            <a href="<?= site_url('admin/users') ?>">
+                        <li class="<?php
+                        if ($uri == 'users') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('admin/users') ?>">
                                 <i class="entypo-users"></i>
                                 <span class="title">Users</span>
                             </a>
                         </li>
-                        <li class="<?php if ($uri == 'prequal_request') { echo 'active'; } ?>">
-                            <a href="<?= site_url('admin/prequal_request') ?>">
+                        <li class="<?php
+                        if ($uri == 'prequal_request') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('admin/prequal_request') ?>">
                                 <i class="entypo-credit-card"></i>
                                 <span class="title">Pre-Qual Request</span>
                             </a>
                         </li>
-                        <li class="<?php if ($uri == 'refinance_request') { echo 'active'; } ?>">
-                            <a href="<?= site_url('admin/refinance_request') ?>">
+                        <li class="<?php
+                        if ($uri == 'refinance_request') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('admin/refinance_request') ?>">
                                 <i class="entypo-paypal"></i>
                                 <span class="title">Refinance Request</span>
+                            </a>
+                        </li>
+                        <li class="<?php
+                        if ($className == 'news') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('news/index') ?>">
+                                <i class="entypo-newspaper"></i>
+                                <span class="title">News</span>
+                            </a>
+                        </li>
+                        <li class="<?php
+                        if ($className == 'settings') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('settings/index') ?>">
+                                <i class="entypo-info-circled"></i>
+                                <span class="title">Settings</span>
+                            </a>
+                        </li>
+                        <li class="<?php
+                        if ($className == 'terms') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('terms/index') ?>">
+                                <i class="entypo-lock"></i>
+                                <span class="title">Terms & Conditions</span>
+                            </a>
+                        </li>
+                        <li class="<?php
+                        if ($className == 'email') {
+                            echo 'active';
+                        }
+                        ?>">
+                            <a href="<?php echo site_url('email/index') ?>">
+                                <i class="entypo-mail"></i>
+                                <span class="title">Email Templates</span>
                             </a>
                         </li>
                     </ul>
@@ -99,8 +157,8 @@ $uri = $this->uri->segment(2);
                             <!-- Profile Info -->
                             <li class="profile-info dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <img src="<?= base_url('assets_admin/images/logo.png') ?>" alt="" class="img-circle" width="44" />
-                                    Admin
+                                    <img src="<?= base_url('assets_admin/images/1516967147106.jpg') ?>" alt="" class="img-circle" width="64" />
+                                    Isaac Weiser 
                                 </a>
 
                                 <ul class="dropdown-menu">
@@ -139,47 +197,47 @@ $uri = $this->uri->segment(2);
 
                 <hr />
 
-                <?php
-                if (isset($content) && $content) {
-                    $this->load->view($content);
-                }
-                ?>
+<?php
+if (isset($content) && $content) {
+    $this->load->view($content);
+}
+?>
 
                 <br />
 
                 <!-- Footer -->
                 <footer class="main">
-                    Copyright &copy; <?= date('Y') ?> <a class="" target="_blank" href="#">Mortgage4U.COM</a>. All Rights Reserved.
+                    Copyright &copy; <?php echo date('Y') ?> <a class="" target="_blank" href="#">Mortgage4U</a>. All Rights Reserved.
                 </footer>
             </div>
         </div>
 
         <!-- Bottom scripts (common) -->
-        <script src="<?= base_url('assets_admin/js/gsap/main-gsap.js') ?>"></script>
-        <script src="<?= base_url('assets_admin/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') ?>"></script>
-        <script src="<?= base_url('assets_admin/js/bootstrap.js') ?>"></script>
-        <script src="<?= base_url('assets_admin/js/joinable.js') ?>"></script>
-        <script src="<?= base_url('assets_admin/js/resizeable.js') ?>"></script>
-        <script src="<?= base_url('assets_admin/js/neon-api.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/gsap/main-gsap.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/bootstrap.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/joinable.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/resizeable.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/neon-api.js') ?>"></script>
 
         <!-- Imported scripts on this page -->
-        <script src="<?= base_url('assets_admin/js/toastr.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/toastr.js') ?>"></script>
 
         <!-- Date Picket -->
-        <script src="<?= base_url('assets_admin/js/bootstrap-datepicker.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/bootstrap-datepicker.js') ?>"></script>
         <!-- typeahead -->
-        <script src="<?= base_url('assets_admin/js/jquery.typeahead.min.js'); ?>"></script>
-        <script src="<?= base_url('assets_admin/js/typeahead.js'); ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/jquery.typeahead.min.js'); ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/typeahead.js'); ?>"></script>
 
         <!-- wait me -->
-        <script src="<?= base_url('assets_admin/js/waitMe.min.js'); ?>"></script>
-        <script src="<?= base_url('assets_admin/js/waitMe.js'); ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/waitMe.min.js'); ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/waitMe.js'); ?>"></script>
 
         <!-- JavaScripts initializations and stuff -->
-        <script src="<?= base_url('assets_admin/js/neon-custom.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/neon-custom.js') ?>"></script>
 
         <!-- Demo Settings -->
-        <script src="<?= base_url('assets_admin/js/neon-demo.js') ?>"></script>
+        <script src="<?php echo base_url('assets_admin/js/neon-demo.js') ?>"></script>
 
         <script type="text/javascript">
             /** overlay */

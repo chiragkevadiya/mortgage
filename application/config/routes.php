@@ -66,3 +66,9 @@ $route['web/apis/prequal_request'] = 'webservices/prequal_request';
 $route['web/apis/submit_testimonial'] = 'webservices/submit_testimonial';
 $route['web/apis/testimonial'] = 'webservices/testimonial';
 $route['web/apis/send_email'] = 'webservices/send_email';
+
+$route['web/apis/news'] = 'webservices/news';
+$route['web/apis/info'] = 'webservices/info';
+
+// Website
+$route['news/(:num)'] = 'welcome/news/$1';

@@ -1645,8 +1645,9 @@ html {
 }
 body {
     font-family: "Noto Sans", sans-serif;
-    font-size: 12px;
-    line-height: 1.42857143;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
     color: #000;
     background-color: #ffffff;
 }

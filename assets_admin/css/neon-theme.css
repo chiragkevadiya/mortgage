@@ -6969,3 +6969,9 @@ dd-content,
 .custom-handler .dd-item button + .dd-handle + .dd-content {
     padding-left: 50px;
 }
+
+.news_image {
+    width: 250px !important;
+    height: 150px !important;
+    border-radius: 0% !important;
+}

@@ -58,6 +58,13 @@ class Webservices extends REST_Controller {
         }
     }
 
+    /** info */
+    public function info_post() {
+        $this->user_auth();
+        $info = $this->webservice->get_info();
+        $this->response(['status' => true, 'info' => $info], REST_Controller::HTTP_OK);
+    }
+
     /** register */
     public function signup_post() {
         $data = $this->json_decode();
@@ -472,57 +479,64 @@ class Webservices extends REST_Controller {
     /** send email */
     public function send_email_post() {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-        $this->form_validation->set_rules('subject', 'Subject', 'trim|required');
-        $this->form_validation->set_rules('message', 'Message', 'trim');
         $this->form_validation->set_rules('cal_type', 'Calculator type', 'trim|required');
 
         if ($this->form_validation->run() === TRUE) {
             $to = $this->input->post('email');
             $cal_type = $this->input->post('cal_type');
-            $imagepath = $this->save_image();
+            $file_path = $this->save_image();
             $subject = $this->input->post('subject');
 
             $data['subject'] = $subject;
-            
-            if ($cal_type == 'mortgage_calculation') {
-                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
-            } else if ($cal_type == 'loan_compare') {
-                $html = $this->load->view('auth/email/loan_compare', $data, true);
-            } else if ($cal_type == 'refinance_saving') {
-                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
-            } else if ($cal_type == 'amortization_calc') {
-                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
-            } else if ($cal_type == 'payoff_calc') {
-                $html = $this->load->view('auth/email/mortgage_calculation', $data, true);
-            }
+            $email = $this->webservice->get_table_row('email', array('name_of_template' => $cal_type));
+            $data['email'] = $email;
+            $html = $this->load->view('auth/email/common_email', $data, true);
 
-            if (send_mail($to, $subject, $html, $imagepath)) {
-                $this->response(['status' => true, 'message' => 'Email has been send successfully'], REST_Controller::HTTP_OK);
+            if (send_mail($to, $email->subject, $html, $file_path)) {
+                $this->response(['status' => true, 'message' => 'Email has been sent successfully'], REST_Controller::HTTP_OK);
             } else {
                 $this->response(['status' => false, 'message' => 'Failed! Please try again'], REST_Controller::HTTP_OK);
             }
         } else {
-            $error = ['email' => form_error('email'), 'subject' => form_error('subject'), 'message' => form_error('message'), 'cal_type' => form_error('cal_type')];
+            $error = ['email' => form_error('email'), 'cal_type' => form_error('cal_type')];
             $this->response(['status' => false, 'data' => ['error' => $error], 'message' => 'Validation Error'], REST_Controller::HTTP_OK);
         }
     }
 
     private function save_image() {
         if (!empty($_FILES['cal_image']['name'])) {
-            $config['upload_path'] = PROFILE_PICTURE_PATH;
-            $config['allowed_types'] = '*';
+            $configImage['upload_path'] = PROFILE_PICTURE_PATH;
+            //$configImage['max_size'] = 500;
+            $configImage['allowed_types'] = 'jpg|jpeg|png|gif';
+            $configImage['overwrite'] = FALSE;
+            $configImage['remove_spaces'] = TRUE;
+            $image_name = random_string('numeric', 10);
+            $configImage['file_name'] = $image_name;
 
-            $this->load->library('upload', $config);
+            $this->load->library('upload', $configImage);
+            $this->upload->initialize($configImage);
+
             if (!$this->upload->do_upload('cal_image')) {
                 $this->response(['status' => false, 'message' => strip_tags($this->upload->display_errors())], REST_Controller::HTTP_OK);
-                return;
+                exit();
             } else {
-                $img_data = $this->upload->data();
-                $imagepath = base_url(PROFILE_PICTURE_PATH . $img_data['file_name']);
-                return $imagepath;
+                $image_data = $this->upload->data();
+                $file_path = base_url(PROFILE_PICTURE_PATH . $image_data['file_name']);
+                return $file_path;
             }
         } else {
             return null;
+        }
+    }
+
+    /** news */
+    public function news_post() {
+        $this->user_auth();
+        $list = $this->webservice->get_all_news();
+        if (count($list) > 0) {
+            $this->response(['status' => true, 'news' => $list], REST_Controller::HTTP_OK);
+        } else {
+            $this->response(['status' => false, 'message' => 'No record found.'], REST_Controller::HTTP_OK);
         }
     }
 

@@ -687,9 +687,6 @@ var public_vars = public_vars || {};
             });
         }
 
-
-
-
         // Datepicker
         if ($.isFunction($.fn.datepicker))
         {
@@ -731,9 +728,6 @@ var public_vars = public_vars || {};
                 }
             });
         }
-
-
-
 
         // Timepicker
         if ($.isFunction($.fn.timepicker))
