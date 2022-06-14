@@ -107,6 +107,8 @@ class News extends MY_Controller {
                 );
 
                 $this->backend->insert_data('news', $dataPost);
+                $users = $this->news->all_users();
+                $this->send_notification($users, 'Mortgage News', $this->input->post('title'));
                 echo json_encode(['status' => true, 'message' => 'News has been added successfully.', 'redirect' => site_url('news/index')]);
             } else {
                 /** edit function */
@@ -114,6 +116,34 @@ class News extends MY_Controller {
         } else {
             $error = ['title' => form_error('title'), 'image' => form_error('image'), 'description' => form_error('description')];
             echo json_encode(['status' => false, 'data' => ['error' => $error], 'message' => '']);
+        }
+    }
+
+    private function send_notification($users, $title, $message) {
+        if ($users['status']) {
+            $data = [
+                "registration_ids" => $users['data'],
+                "data" => array("title" => $title, 'uid' => '1', "text" => $message, 'sound' => "default")
+            ];
+
+            $dataString = json_encode($data);
+
+            $headers = [
+                'Authorization: key=' . FIREBASE_KEY,
+                'Content-Type: application/json',
+            ];
+
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+            curl_exec($ch);
+            curl_close($ch);
         }
     }
 

@@ -14,19 +14,22 @@ function send_mail($to, $subject, $html, $attch = null) {
 
     //SMTP & mail configuration
     $config = array(
-        'mailtype' => 'html',
-        'protocol' => 'smtp',
-        'smtp_host' => 'smtp.sendgrid.net',
+        'smtp_host' => 'smtp.ionos.com',
         'smtp_port' => '587',
-        'smtp_user' => 'apikey',
-        'smtp_pass' => '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',
-        'charset' => 'iso-8859-1'
+        'smtp_user' => 'isaac@mortgagecalculator4u.com',
+        '_smtp_auth' => TRUE,
+        'smtp_pass' => 'Isaac@862#',
+        'smtp_crypto' => 'tls',
+        'protocol' => 'smtp',
+        'mailtype' => 'html',
+        'charset' => 'utf-8',
+        'wordwrap' => TRUE
     );
 
     $CI->email->initialize($config);
     $CI->email->set_newline("\r\n");
 
-    $CI->email->from(EMAIL, 'Mortgage4u');
+    $CI->email->from('isaac@mortgagecalculator4u.com', 'Mortgagecalculator4u.com');
     $CI->email->to($to);
     $CI->email->subject($subject);
     $CI->email->message($html);

@@ -50,4 +50,25 @@ class News_model extends CI_Model {
         }
     }
 
+    function all_users() {
+        $this->db->select('u.device_token');
+        $this->db->from('users as u');
+
+        $this->db->where(array('u.active' => 1));
+        $this->db->where('u.device_token is NOT NULL', NULL, FALSE);
+
+        $res = $this->db->get()->result();
+
+        if (count($res) > 0) {
+            $tokens = array();
+            foreach ($res as $row) {
+                $tokens[] = $row->device_token;
+            }
+
+            return ['status' => TRUE, 'data' => $tokens];
+        } else {
+            return ['status' => FALSE];
+        }
+    }
+
 }
